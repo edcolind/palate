@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PALATE — Personal Food Curator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --cream: #F5F0E8;
+  --ink: #1A1714;
+  --ink-2: #3D3830;
+  --ink-3: #7A7268;
+  --ink-4: #B5AFA6;
+  --copper: #A0522D;
+  --copper-light: #C8845A;
+  --copper-pale: #F0E4D8;
+  --white: #FDFCFA;
+  --border: rgba(26,23,20,0.1);
+  --border-strong: rgba(26,23,20,0.2);
+  --radius: 4px;
+  --radius-lg: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 3rem;
+  height: 60px;
+  background: rgba(245,240,232,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  color: var(--ink);
+}
+.nav-links { display: flex; gap: 2.5rem; }
+.nav-links a {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-3);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 60px;
+}
+.hero-left {
+  padding: 8rem 4rem 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 0.5px solid var(--border);
+}
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+.hero-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(42px, 5vw, 72px);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  color: var(--ink);
+}
+.hero-h1 em {
+  font-style: italic;
+  color: var(--copper);
+}
+.hero-desc {
+  font-size: 15px;
+  color: var(--ink-3);
+  max-width: 380px;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+}
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.hero-cta:hover { color: var(--copper); border-color: var(--copper); }
+
+.hero-right {
+  padding: 8rem 4rem 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+.hero-stat {
+  padding: 1.5rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.hero-stat:first-child { border-top: 0.5px solid var(--border); }
+.hero-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.hero-stat-label {
+  font-size: 12px;
+  color: var(--ink-4);
+  font-weight: 300;
+}
+
+/* ── SECTION COMMON ── */
+section {
+  padding: 6rem 3rem;
+  border-top: 0.5px solid var(--border);
+}
+.section-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+.section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.1em;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--ink);
+}
+.section-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.1em;
+}
+
+/* ── FILTERS ── */
+.filter-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+.filter-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+.filter-btn.active {
+  background: var(--ink);
+  color: var(--cream);
+  border-color: var(--ink);
+}
+
+/* ── REVIEW GRID ── */
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0;
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.review-card {
+  padding: 1.75rem;
+  border-right: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+  background: var(--white);
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+.review-card:hover { background: var(--copper-pale); }
+.review-thumb {
+  width: 100%; height: 180px;
+  background: var(--cream);
+  border-radius: var(--radius);
+  margin-bottom: 1.25rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  overflow: hidden;
+  position: relative;
+}
+.review-thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.review-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--copper);
+  margin-bottom: 6px;
+}
+.review-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 3px;
+}
+.review-loc {
+  font-size: 12px;
+  color: var(--ink-4);
+  margin-bottom: 10px;
+}
+.review-rating {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 10px;
+}
+.stars {
+  display: flex; gap: 2px;
+}
+.star-fill {
+  width: 8px; height: 8px;
+  background: var(--copper);
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
+.star-empty {
+  width: 8px; height: 8px;
+  background: var(--border-strong);
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
+.rating-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.review-snippet {
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+.review-price {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.05em;
+}
+
+/* ── UPCOMING ── */
+.upcoming-list {
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.upcoming-item {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.25rem 1.75rem;
+  background: var(--white);
+  border-bottom: 0.5px solid var(--border);
+  transition: background 0.15s;
+}
+.upcoming-item:last-child { border-bottom: none; }
+.upcoming-item:hover { background: var(--copper-pale); }
+.up-date-block { }
+.up-day {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--ink);
+}
+.up-month {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.up-info { }
+.up-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 2px;
+}
+.up-addr {
+  font-size: 12px;
+  color: var(--ink-4);
+}
+.up-status {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.dot-green { background: #2D8A5E; }
+.dot-amber { background: #C8845A; }
+
+/* ── INVEST ── */
+.invest-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+.invest-left { }
+.invest-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+.invest-number em {
+  font-style: italic;
+  color: var(--copper);
+}
+.invest-desc {
+  font-size: 15px;
+  color: var(--ink-3);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  max-width: 420px;
+}
+.invest-criteria {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.crit-item {
+  padding: 1.25rem 1.5rem;
+  background: var(--white);
+  border-right: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+.crit-item:nth-child(2n) { border-right: none; }
+.crit-item:nth-last-child(-n+2) { border-bottom: none; }
+.crit-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 5px;
+}
+.crit-val {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.invest-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 28px;
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.invest-btn:hover { background: var(--copper); }
+
+.invest-right { }
+.invest-form {
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.form-header {
+  padding: 1.25rem 1.5rem;
+  background: var(--ink);
+  color: var(--cream);
+}
+.form-header-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.form-body { padding: 1.5rem; background: var(--white); display: flex; flex-direction: column; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--copper);
+}
+.form-textarea { resize: vertical; min-height: 90px; }
+.form-select { appearance: none; cursor: pointer; }
+.form-submit {
+  width: 100%;
+  padding: 12px;
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.form-submit:hover { background: var(--copper); }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 0.5px solid var(--border);
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ink-4);
+}
+.footer-note {
+  font-size: 11px;
+  color: var(--ink-4);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-left > * {
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards;
+}
+.hero-eyebrow { animation-delay: 0.1s; }
+.hero-h1 { animation-delay: 0.2s; }
+.hero-desc { animation-delay: 0.3s; }
+.hero-cta { animation-delay: 0.4s; }
+.hero-stat { animation: fadeUp 0.6s ease forwards; opacity: 0; }
+.hero-stat:nth-child(1) { animation-delay: 0.3s; }
+.hero-stat:nth-child(2) { animation-delay: 0.4s; }
+.hero-stat:nth-child(3) { animation-delay: 0.5s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { padding: 4rem 1.5rem 2rem; border-right: none; border-bottom: 0.5px solid var(--border); }
+  .hero-right { padding: 2rem 1.5rem; }
+  section { padding: 4rem 1.5rem; }
+  nav { padding: 0 1.5rem; }
+  .invest-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .section-header { grid-template-columns: auto 1fr; }
+  .section-meta { display: none; }
+  .upcoming-item { grid-template-columns: 70px 1fr; }
+  .up-status { display: none; }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">PALATE</div>
+  <div class="nav-links">
+    <a href="#reviews">Reviews</a>
+    <a href="#upcoming">Upcoming</a>
+    <a href="#invest">Invest</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Personal food curator — Jakarta & Bali</div>
+    <h1 class="hero-h1">Places worth<br>your <em>table.</em></h1>
+    <p class="hero-desc">Every spot here has been visited, ordered, and eaten firsthand. No PR invite, no gifted meal — just honest takes from someone who eats a lot.</p>
+    <a class="hero-cta" href="#reviews">See all reviews <span>↓</span></a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="stat-reviews">—</div>
+      <div class="hero-stat-label">places reviewed</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4</div>
+      <div class="hero-stat-label">visits this week</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">Rp 50jt</div>
+      <div class="hero-stat-label">available to invest</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1: REVIEWS -->
+<section id="reviews">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">Reviews</span>
+    <span class="section-meta" id="review-meta">loading</span>
+  </div>
+
+  <div class="filter-row" id="filter-row"></div>
+  <div class="review-grid" id="review-grid"></div>
+</section>
+
+<!-- SECTION 2: UPCOMING -->
+<section id="upcoming">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">On the radar</span>
+    <span class="section-meta">Next 7 days</span>
+  </div>
+  <div class="upcoming-list" id="upcoming-list"></div>
+</section>
+
+<!-- SECTION 3: INVEST -->
+<section id="invest">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <span class="section-title">F&B Investment</span>
+    <span class="section-meta">Partnership model</span>
+  </div>
+
+  <div class="invest-layout">
+    <div class="invest-left">
+      <div class="invest-number">Up to<br><em>Rp 50 juta.</em></div>
+      <p class="invest-desc">Gw bukan VC. Gw partner — ikut taste test, ikut bantu positioning, ikut seneng waktu tempat lo rame. Investment berbasis kemitraan nyata, bukan sekadar modal.</p>
+      <div class="invest-criteria">
+        <div class="crit-item">
+          <div class="crit-label">Ticket size</div>
+          <div class="crit-val">Rp 10 — 50 juta</div>
+        </div>
+        <div class="crit-item">
+          <div class="crit-label">Model</div>
+          <div class="crit-val">Equity partnership</div>
+        </div>
+        <div class="crit-item">
+          <div class="crit-label">Fokus</div>
+          <div class="crit-val">F&B concept only</div>
+        </div>
+        <div class="crit-item">
+          <div class="crit-label">Area</div>
+          <div class="crit-val">Jakarta & Bali</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="invest-right">
+      <div class="invest-form">
+        <div class="form-header">
+          <div class="form-header-title">Submit a proposal</div>
+        </div>
+        <div class="form-body">
+          <div class="form-group">
+            <label class="form-label">Nama / Brand</label>
+            <input type="text" class="form-input" placeholder="Nama lo atau nama bisnis">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tipe Konsep</label>
+            <select class="form-select">
+              <option value="">Pilih kategori</option>
+              <option>Street food / Gerobak</option>
+              <option>Casual dining</option>
+              <option>Kafe / Coffee shop</option>
+              <option>Cloud kitchen</option>
+              <option>Fine dining</option>
+              <option>Lainnya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Investment yang dibutuhkan</label>
+            <input type="text" class="form-input" placeholder="Contoh: Rp 25.000.000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ceritain konsepnya</label>
+            <textarea class="form-textarea" placeholder="Apa yang bikin bisnis lo beda? Udah ada proof of concept?"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kontak (WA / Instagram / Email)</label>
+            <input type="text" class="form-input" placeholder="Cara gw bisa reach lo">
+          </div>
+          <button class="form-submit" onclick="submitProposal()">Kirim Proposal →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">PALATE</div>
+  <div class="footer-note">Updated weekly · Jakarta Selatan, Indonesia</div>
+</footer>
+
+<script>
+/* ─ DATA ─────────────────────────────────────────────────────────────────────
+   PANDUAN UPDATE:
+   Untuk update konten, edit array `REVIEWS` dan `UPCOMING` di bawah.
+   Format review: { name, category, location, rating (1-5), snippet, price, icon }
+   Format upcoming: { day, month, name, address, status: 'confirmed' | 'tentative' }
+─────────────────────────────────────────────────────────────────────────── */
+
+const REVIEWS = [
+  {
+    name: "Aragawa Jakarta",
+    category: "Steakhouse",
+    location: "Menteng, Jakarta Pusat",
+    rating: 5,
+    snippet: "Wagyu A5 terbaik yang pernah gw makan di Jakarta. Worth every rupiah untuk special occasion.",
+    price: "Rp 800rb – 2jt / orang",
+    icon: "🥩"
+  },
+  {
+    name: "Pochajjang PIK",
+    category: "Korean BBQ",
+    location: "PIK, Jakarta Utara",
+    rating: 4,
+    snippet: "Daging segar, banchan unlimited, dan grill sendiri yang seru. Antre panjang tapi worth it.",
+    price: "Rp 200rb – 350rb / orang",
+    icon: "🔥"
+  },
+  {
+    name: "Enoshima",
+    category: "Izakaya",
+    location: "Kemang, Jakarta Selatan",
+    rating: 5,
+    snippet: "Sake terbaik di Jakarta versi gw. Skewer udang krispi + suasana yang bikin betah sampai tutup.",
+    price: "Rp 300rb – 500rb / orang",
+    icon: "🍶"
+  },
+  {
+    name: "Warung Bu Mi",
+    category: "Street Food",
+    location: "Ubud, Bali",
+    rating: 4,
+    snippet: "Nasi campur Bali yang autentik. Babi guling-nya crispy sempurna, sambal matah segar banget.",
+    price: "Rp 35rb – 60rb / orang",
+    icon: "🍛"
+  },
+  {
+    name: "El Asador",
+    category: "Steakhouse",
+    location: "Seminyak, Bali",
+    rating: 4,
+    snippet: "Argentine-style open fire grill. Ribeye juicy, chimichurri homemade, view garden yang enak.",
+    price: "Rp 400rb – 700rb / orang",
+    icon: "🥩"
+  },
+  {
+    name: "Hoshigaoka",
+    category: "Izakaya",
+    location: "Sudirman, Jakarta Selatan",
+    rating: 5,
+    snippet: "Hidden gem izakaya di basement. Sashimi segar, highball balanced, harga masuk akal.",
+    price: "Rp 250rb – 450rb / orang",
+    icon: "🍱"
+  }
+];
+
+const UPCOMING = [
+  { day: "14", month: "Apr", name: "Burnt Ends SCBD", address: "Jl. Sudirman, Jakarta Selatan", status: "confirmed" },
+  { day: "15", month: "Apr", name: "Gyu-Kaku Senayan", address: "Plaza Senayan, Jakarta Pusat", status: "confirmed" },
+  { day: "17", month: "Apr", name: "Merah Putih Bali", address: "Jl. Petitenget, Seminyak", status: "tentative" },
+  { day: "18", month: "Apr", name: "Warung Mak Beng", address: "Jl. Hang Tuah, Sanur", status: "tentative" }
+];
+
+/* ─ RENDER ─────────────────────────────────────────────────────────────────── */
+
+function stars(n) {
+  return Array.from({length:5}, (_,i) =>
+    `<div class="${i < n ? 'star-fill' : 'star-empty'}"></div>`
+  ).join('');
+}
+
+function renderReviews(data) {
+  document.getElementById('review-meta').textContent = data.length + ' places';
+  document.getElementById('stat-reviews').textContent = REVIEWS.length;
+  document.getElementById('review-grid').innerHTML = data.map(r => `
+    <div class="review-card">
+      <div class="review-thumb">${r.icon}</div>
+      <div class="review-cat">${r.category}</div>
+      <div class="review-name">${r.name}</div>
+      <div class="review-loc">${r.location}</div>
+      <div class="review-rating">
+        <div class="stars">${stars(r.rating)}</div>
+        <span class="rating-num">${r.rating}.0</span>
+      </div>
+      <div class="review-snippet">${r.snippet}</div>
+      <div class="review-price">${r.price}</div>
+    </div>
+  `).join('');
+}
+
+function buildFilters() {
+  const cats = ['All', ...new Set(REVIEWS.map(r => r.category))];
+  document.getElementById('filter-row').innerHTML = cats.map((c, i) => `
+    <button class="filter-btn${i===0?' active':''}" onclick="filterReviews('${c}', this)">${c}</button>
+  `).join('');
+}
+
+function filterReviews(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = cat === 'All' ? REVIEWS : REVIEWS.filter(r => r.category === cat);
+  renderReviews(filtered);
+}
+
+function renderUpcoming() {
+  document.getElementById('upcoming-list').innerHTML = UPCOMING.map(u => `
+    <div class="upcoming-item">
+      <div class="up-date-block">
+        <div class="up-day">${u.day}</div>
+        <div class="up-month">${u.month}</div>
+      </div>
+      <div class="up-info">
+        <div class="up-name">${u.name}</div>
+        <div class="up-addr">${u.address}</div>
+      </div>
+      <div class="up-status">
+        <div class="dot ${u.status === 'confirmed' ? 'dot-green' : 'dot-amber'}"></div>
+        ${u.status}
+      </div>
+    </div>
+  `).join('');
+}
+
+function submitProposal() {
+  alert('Terima kasih! Proposal lo sudah diterima. Gw akan reach out dalam 3-5 hari kerja.');
+}
+
+buildFilters();
+renderReviews(REVIEWS);
+renderUpcoming();
+</script>
+</body>
+</html>
