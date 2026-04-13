@@ -367,16 +367,8 @@ const UPCOMING = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   FORMSPREE SETUP — Cara aktifkan form ke email colindadhi@gmail.com:
-
-   1. Buka https://formspree.io → Sign up dengan colindadhi@gmail.com
-   2. Klik "+ New Form" → beri nama "Palate Investment Proposals"
-   3. Copy ID yang muncul (format: xabc1234)
-   4. Ganti YOUR_FORMSPREE_ID di bawah dengan ID tersebut
-   5. Selesai! Setiap submission otomatis masuk ke colindadhi@gmail.com
-
-   DOWNLOAD EXCEL: Login ke formspree.io → tab "Submissions" → klik "Export"
-   → pilih CSV → buka di Excel. Semua proposal tersimpan & bisa difilter.
+   FORMSPREE: Form sudah terhubung ke colindadhi@gmail.com via endpoint xrerzngo.
+   DOWNLOAD EXCEL: Login ke formspree.io → tab "Submissions" → klik "Export" → CSV → buka di Excel.
 ═══════════════════════════════════════════════════════════════════════════ */
 const FORMSPREE_ID = 'xrerzngo';
 
@@ -493,7 +485,7 @@ async function submitProposal() {
   btn.disabled = true; btn.textContent = 'Mengirim...';
 
   try {
-    const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+    const res = await fetch(`https://formspree.io/f/xrerzngo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({
