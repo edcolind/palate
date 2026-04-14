@@ -303,85 +303,92 @@ footer { padding: 1.5rem 3rem; display: flex; justify-content: space-between; al
 
 const REVIEWS = [
   {
-    name: "Couz Steakhouse",
-    category: "Steakhouse",
-    location: "Kemang, Jakarta Selatan",
-    rating: 5,
-    snippet: "Dry Aging cutting ter worth it yang pernah gw makan di Jaksel. Worth every penny .",
-    price: "Rp 250 - 700 / orang",
-    photos: ["https://i.ibb.co/qFRG7SLP/Screenshot-2026-04-14-at-15-09-03.jpg"]
-    // Contoh isi foto: photos: ["https://i.ibb.co/abc/foto-makanan.jpg", "https://i.ibb.co/xyz/foto-resto.jpg"]
+    "name": "Aragawa Jakarta",
+    "category": "Steakhouse",
+    "location": "Menteng, Jakarta Pusat",
+    "rating": 5,
+    "snippet": "Wagyu A5 terbaik yang pernah gw makan di Jakarta. Worth every rupiah untuk special occasion.",
+    "price": "Rp 800rb – 2jt / orang",
+    "photos": [
+      "https://i.ibb.co/Y7rNpKCj/Screenshot-2026-04-13-at-14-42-16.png"
+    ]
   },
   {
-    name: "Mr Park",
-    category: "Korean BBQ",
-    location: "SCBD, Jakarta Selatan",
-    rating: 4,
-    snippet: " Varian banchan terbaik, dan daging nya ampun! nyaman di mulut, worth it pokoknya .",
-    price: "Rp 250 – 350rb / orang",
-    photos: ["https://i.ibb.co/chgbC551/Screenshot-2026-04-14-at-15-12-03.png"]
+    "name": "Pochajjang PIK",
+    "category": "Korean BBQ",
+    "location": "PIK, Jakarta Utara",
+    "rating": 4,
+    "snippet": "Daging segar, banchan unlimited, dan grill sendiri yang seru. Antre panjang tapi worth it.",
+    "price": "Rp 200rb – 350rb / orang",
+    "photos": []
   },
   {
-    name: "Torisei",
-    category: "Izakaya",
-    location: "Blok M, Jakarta Selatan",
-    rating: 5,
-    snippet: "Izakaya terbaik di se-Jaksel sih fix, authentic dan feels like in Japan sih ini tempat, underrated ",
-    price: "Rp 300rb – 500rb / orang",
-    photos: ["https://i.ibb.co/kVGK0FJy/Screenshot-2026-04-14-at-15-15-09.png"]
+    "name": "Enoshima",
+    "category": "Izakaya",
+    "location": "Kemang, Jakarta Selatan",
+    "rating": 5,
+    "snippet": "Sake terbaik di Jakarta versi gw. Skewer udang krispi + suasana yang bikin betah sampai tutup.",
+    "price": "Rp 300rb – 500rb / orang",
+    "photos": []
   },
   {
-    name: "Babi Guling Pan Ana",
-    category: "Street Food",
-    location: "Denpasar Bali",
-    rating: 5,
-    snippet: "kalau lo cari bigul yang basah dan gak kering serta bumbu nya medok sih inii sih rekomendasi.",
-    price: "Rp 35rb / orang",
-    photos: []
+    "name": "Warung Bu Mi",
+    "category": "Street Food",
+    "location": "Ubud, Bali",
+    "rating": 4,
+    "snippet": "Nasi campur Bali yang autentik. Babi guling-nya crispy sempurna, sambal matah segar banget.",
+    "price": "Rp 35rb – 60rb / orang",
+    "photos": []
   },
   {
-    name: "Babi Guling Swari",
-    category: "Street Food",
-    location: "Canggu, Bali",
-    rating: 5,
-    snippet: "bigul juaranya canggu nih, kulit nya crispy pol, sambel nya nampol, bumbu bigul nya berani.",
-    price: "Rp 25rb - 35rb / orang",
-    photos: []
+    "name": "El Asador",
+    "category": "Steakhouse",
+    "location": "Seminyak, Bali",
+    "rating": 4,
+    "snippet": "Argentine-style open fire grill. Ribeye juicy, chimichurri homemade, view garden yang enak.",
+    "price": "Rp 400rb – 700rb / orang",
+    "photos": []
   },
   {
-    name: "Tori Hachi",
-    category: "Izakaya",
-    location: "Blok M, Jakarta Selatan",
-    rating: 5,
-    snippet: "Ramen shoyu nya sih otentik banget, ambience nya feels like in Japan.",
-    price: "Rp 250rb / orang",
-    photos: []
-  },
-  {
-    name: "Skool Kitchen",
-    category: "Steakhouse",
-    location: "Canggu, Bali",
-    rating: 5,
-    snippet: "one of the best fine dining in Bali, Foods, Cocktails, Vibes, Hospitality nya super recommended.",
-    price: "Rp 500rb / orang",
-    photos: []
-   },
-   {
-    name: "Alma Tapas",
-    category: "Steakhouse",
-    location: "Canggu, Bali",
-    rating: 5,
-    snippet: "gue jarang suka spanish food, but this one is legit!",
-    price: "Rp 500rb / orang",
-    photos: []
-   },
+    "name": "Hoshigaoka",
+    "category": "Izakaya",
+    "location": "Sudirman, Jakarta Selatan",
+    "rating": 5,
+    "snippet": "Hidden gem izakaya di basement. Sashimi segar, highball balanced, harga masuk akal.",
+    "price": "Rp 250rb – 450rb / orang",
+    "photos": []
+  }
 ];
 
 const UPCOMING = [
-  { day: "18", month: "Apr", name: "Salira", address: "Senopati, Jakarta Selatan", status: "confirmed" },
-  { day: "20", month: "Apr", name: "Mei Mei Bali", address: "Canggu, Bali", status: "confirmed" },
-  { day: "24", month: "Apr", name: "Putri Hanjawar", address: "Dharmawangsa, Jakarta Selatan", status: "tentative" },
-  { day: "26", month: "Apr", name: "Warung Mak Beng", address: "Jl. Hang Tuah, Sanur", status: "tentative" }
+  {
+    "day": "14",
+    "month": "Apr",
+    "name": "Burnt Ends SCBD",
+    "address": "Jl. Sudirman, Jakarta Selatan",
+    "status": "confirmed"
+  },
+  {
+    "day": "15",
+    "month": "Apr",
+    "name": "Gyu-Kaku Senayan",
+    "address": "Plaza Senayan, Jakarta Pusat",
+    "status": "confirmed"
+  },
+  {
+    "day": "17",
+    "month": "Apr",
+    "name": "Merah Putih Bali",
+    "address": "Jl. Petitenget, Seminyak",
+    "status": "tentative"
+  },
+  {
+    "day": "18",
+    "month": "Apr",
+    "name": "Warung Mak Beng",
+    "address": "Jl. Hang Tuah, Sanur",
+    "status": "tentative"
+  }
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
