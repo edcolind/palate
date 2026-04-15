@@ -77,23 +77,38 @@ section { padding: 72px 3rem; border-bottom: 0.5px solid var(--border); }
 }
 .review-card:hover { background: var(--hover); }
 
-/* PHOTO BLOCK */
+/* PHOTO SLIDER */
 .review-photos {
   width: 100%; height: 180px; border-radius: var(--radius); margin-bottom: 1.25rem;
-  overflow: hidden; background: #f2f2f2; position: relative; cursor: pointer;
+  overflow: hidden; background: #f2f2f2; position: relative;
 }
-.review-photos.multi {
-  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px;
+.slider-track {
+  display: flex; height: 100%;
+  transition: transform 0.3s ease;
 }
-.review-photos.single img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.photo-slot { overflow: hidden; }
-.photo-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.photo-slot:first-child { grid-row: 1 / 3; }
-.photo-more {
-  position: absolute; bottom: 8px; right: 8px;
-  background: rgba(0,0,0,0.5); color: #fff; font-size: 11px; font-weight: 500;
-  padding: 3px 8px; border-radius: 20px;
+.slider-slide {
+  min-width: 100%; height: 100%; flex-shrink: 0;
 }
+.slider-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.slider-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(0,0,0,0.45); color: #fff; border: none;
+  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+  font-size: 12px; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s; z-index: 2;
+}
+.slider-btn:hover { background: rgba(0,0,0,0.7); }
+.slider-btn.prev { left: 8px; }
+.slider-btn.next { right: 8px; }
+.slider-dots {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 4px;
+}
+.slider-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(255,255,255,0.5); transition: background 0.15s;
+}
+.slider-dot.on { background: #fff; }
 .photo-placeholder {
   width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px;
 }
@@ -312,99 +327,67 @@ footer { padding: 1.5rem 3rem; display: flex; justify-content: space-between; al
 
 const REVIEWS = [
   {
-    "name": "Aragawa Jakarta",
-    "category": "Steakhouse",
-    "location": "Menteng, Jakarta Pusat",
-    "rating": 5,
-    "snippet": "Wagyu A5 terbaik yang pernah gw makan di Jakarta. Worth every rupiah untuk special occasion.",
-    "price": "Rp 800rb – 2jt / orang",
-    "photos": [
-      "https://res.cloudinary.com/dvwpecf6w/image/upload/f_auto,q_auto/Screenshot_2026-04-13_at_14.42.16_uw9ai0",
-      "https://res.cloudinary.com/dvwpecf6w/image/upload/v1776232189/Screenshot_2026-04-14_at_15.12.03_i6m7s7.png"
-    ],
-    "badge": "must"
+    name: "Aragawa Jakarta",
+    category: "Steakhouse",
+    location: "Menteng, Jakarta Pusat",
+    rating: 5,
+    snippet: "Wagyu A5 terbaik yang pernah gw makan di Jakarta. Worth every rupiah untuk special occasion.",
+    price: "Rp 800rb – 2jt / orang",
+    photos: ["https://i.ibb.co/Y7rNpKCj/Screenshot-2026-04-13-at-14-42-16.png"]
+    // Contoh isi foto: photos: ["https://i.ibb.co/abc/foto-makanan.jpg", "https://i.ibb.co/xyz/foto-resto.jpg"]
   },
   {
-    "name": "Pochajjang PIK",
-    "category": "Korean BBQ",
-    "location": "PIK, Jakarta Utara",
-    "rating": 4,
-    "snippet": "Daging segar, banchan unlimited, dan grill sendiri yang seru. Antre panjang tapi worth it.",
-    "price": "Rp 200rb – 350rb / orang",
-    "photos": [],
-    "badge": "skip"
+    name: "Pochajjang PIK",
+    category: "Korean BBQ",
+    location: "PIK, Jakarta Utara",
+    rating: 4,
+    snippet: "Daging segar, banchan unlimited, dan grill sendiri yang seru. Antre panjang tapi worth it.",
+    price: "Rp 200rb – 350rb / orang",
+    photos: []
   },
   {
-    "name": "Enoshima",
-    "category": "Izakaya",
-    "location": "Kemang, Jakarta Selatan",
-    "rating": 5,
-    "snippet": "Sake terbaik di Jakarta versi gw. Skewer udang krispi + suasana yang bikin betah sampai tutup.",
-    "price": "Rp 300rb – 500rb / orang",
-    "photos": [],
-    "badge": ""
+    name: "Enoshima",
+    category: "Izakaya",
+    location: "Kemang, Jakarta Selatan",
+    rating: 5,
+    snippet: "Sake terbaik di Jakarta versi gw. Skewer udang krispi + suasana yang bikin betah sampai tutup.",
+    price: "Rp 300rb – 500rb / orang",
+    photos: []
   },
   {
-    "name": "Warung Bu Mi",
-    "category": "Street Food",
-    "location": "Ubud, Bali",
-    "rating": 4,
-    "snippet": "Nasi campur Bali yang autentik. Babi guling-nya crispy sempurna, sambal matah segar banget.",
-    "price": "Rp 35rb – 60rb / orang",
-    "photos": [],
-    "badge": ""
+    name: "Warung Bu Mi",
+    category: "Street Food",
+    location: "Ubud, Bali",
+    rating: 4,
+    snippet: "Nasi campur Bali yang autentik. Babi guling-nya crispy sempurna, sambal matah segar banget.",
+    price: "Rp 35rb – 60rb / orang",
+    photos: []
   },
   {
-    "name": "El Asador",
-    "category": "Steakhouse",
-    "location": "Seminyak, Bali",
-    "rating": 4,
-    "snippet": "Argentine-style open fire grill. Ribeye juicy, chimichurri homemade, view garden yang enak.",
-    "price": "Rp 400rb – 700rb / orang",
-    "photos": [],
-    "badge": ""
+    name: "El Asador",
+    category: "Steakhouse",
+    location: "Seminyak, Bali",
+    rating: 4,
+    snippet: "Argentine-style open fire grill. Ribeye juicy, chimichurri homemade, view garden yang enak.",
+    price: "Rp 400rb – 700rb / orang",
+    photos: []
   },
   {
-    "name": "Hoshigaoka",
-    "category": "Izakaya",
-    "location": "Sudirman, Jakarta Selatan",
-    "rating": 5,
-    "snippet": "Hidden gem izakaya di basement. Sashimi segar, highball balanced, harga masuk akal.",
-    "price": "Rp 250rb – 450rb / orang",
-    "photos": [],
-    "badge": ""
+    name: "Hoshigaoka",
+    category: "Izakaya",
+    location: "Sudirman, Jakarta Selatan",
+    rating: 5,
+    snippet: "Hidden gem izakaya di basement. Sashimi segar, highball balanced, harga masuk akal.",
+    price: "Rp 250rb – 450rb / orang",
+    photos: []
   }
 ];
 
 const UPCOMING = [
-  {
-    "day": "14",
-    "month": "Apr",
-    "name": "Burnt Ends SCBD",
-    "address": "Jl. Sudirman, Jakarta Selatan",
-    "status": "confirmed"
-  },
-  {
-    "day": "15",
-    "month": "Apr",
-    "name": "Gyu-Kaku Senayan",
-    "address": "Plaza Senayan, Jakarta Pusat",
-    "status": "confirmed"
-  },
-  {
-    "day": "17",
-    "month": "Apr",
-    "name": "Merah Putih Bali",
-    "address": "Jl. Petitenget, Seminyak",
-    "status": "tentative"
-  },
-  {
-    "day": "18",
-    "month": "Apr",
-    "name": "Warung Mak Beng",
-    "address": "Jl. Hang Tuah, Sanur",
-    "status": "tentative"
-  }
+  { day: "14", month: "Apr", name: "Burnt Ends SCBD", address: "Jl. Sudirman, Jakarta Selatan", status: "confirmed" },
+  { day: "15", month: "Apr", name: "Gyu-Kaku Senayan", address: "Plaza Senayan, Jakarta Pusat", status: "confirmed" },
+  { day: "17", month: "Apr", name: "Merah Putih Bali", address: "Jl. Petitenget, Seminyak", status: "tentative" },
+  { day: "18", month: "Apr", name: "Warung Mak Beng", address: "Jl. Hang Tuah, Sanur", status: "tentative" }
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -443,32 +426,47 @@ document.addEventListener('keydown', e => {
   if (e.key==='Escape') closeLb();
 });
 
-/* ─── PHOTO BLOCK ─────────────────────────────────────────────────────────── */
+/* ─── PHOTO SLIDER ────────────────────────────────────────────────────────── */
 const CAT_EMOJI = {Steakhouse:'🥩','Korean BBQ':'🔥',Izakaya:'🍶','Street Food':'🍛'};
 
-function photoBlock(photos, cat) {
+function photoBlock(photos, cat, cardIdx) {
   if (!photos || photos.length === 0) {
-    return `<div class="review-photos single" style="cursor:default">
+    return `<div class="review-photos">
       <div class="photo-placeholder">${CAT_EMOJI[cat]||'🍽'}</div>
     </div>`;
   }
-  const shown = photos.slice(0, 3);
-  const extra = photos.length - 3;
-  const photosJson = JSON.stringify(photos).replace(/"/g,'&quot;');
-  if (photos.length === 1) {
-    return `<div class="review-photos single" onclick="openLb(JSON.parse(this.dataset.p),0)" data-p="${photosJson}">
-      <img src="${shown[0]}" alt="" loading="lazy">
-    </div>`;
-  }
-  const slots = shown.map((p,i) =>
-    `<div class="photo-slot" onclick="openLb(JSON.parse(document.querySelector('[data-pid=&quot;${cat}&quot;]').dataset.p),${i})">
-      <img src="${p}" alt="" loading="lazy">
-    </div>`
+  const capped = photos.slice(0, 4);
+  const slides = capped.map(p =>
+    `<div class="slider-slide"><img src="${p}" alt="" loading="lazy"></div>`
   ).join('');
-  const more = extra > 0 ? `<div class="photo-more">+${extra}</div>` : '';
-  return `<div class="review-photos multi" data-pid="${cat}" data-p="${photosJson}" onclick="openLb(JSON.parse(this.dataset.p),0)" style="cursor:pointer">
-    ${slots}${more}
+  const dots = capped.length > 1
+    ? `<div class="slider-dots">${capped.map((_,i) =>
+        `<div class="slider-dot${i===0?' on':''}" id="dot-${cardIdx}-${i}"></div>`
+      ).join('')}</div>`
+    : '';
+  const btns = capped.length > 1
+    ? `<button class="slider-btn prev" onclick="slideMove(${cardIdx},-1,event)">&#8592;</button>
+       <button class="slider-btn next" onclick="slideMove(${cardIdx},1,event)">&#8594;</button>`
+    : '';
+  return `<div class="review-photos" id="slider-${cardIdx}">
+    <div class="slider-track" id="track-${cardIdx}" data-idx="0" data-len="${capped.length}"
+         onclick="openLb(${JSON.stringify(capped).replace(/"/g,"'")},+document.getElementById('track-${cardIdx}').dataset.idx)">
+      ${slides}
+    </div>
+    ${btns}${dots}
   </div>`;
+}
+
+function slideMove(cardIdx, dir, e) {
+  e.stopPropagation();
+  const track = document.getElementById('track-' + cardIdx);
+  const len = +track.dataset.len;
+  let idx = (+track.dataset.idx + dir + len) % len;
+  track.dataset.idx = idx;
+  track.style.transform = `translateX(-${idx * 100}%)`;
+  track.parentElement.querySelectorAll('.slider-dot').forEach((d, i) =>
+    d.classList.toggle('on', i === idx)
+  );
 }
 
 /* ─── RENDER REVIEWS ──────────────────────────────────────────────────────── */
@@ -481,13 +479,13 @@ const BADGE_MAP = {
 };
 function renderReviews(data) {
   document.getElementById('review-meta').textContent = data.length + ' places';
-  document.getElementById('review-grid').innerHTML = data.map(r => {
+  document.getElementById('review-grid').innerHTML = data.map((r, i) => {
     const badge = r.badge && BADGE_MAP[r.badge]
       ? `<div class="review-badge ${BADGE_MAP[r.badge].cls}">${BADGE_MAP[r.badge].label}</div>`
       : '';
     return `
     <div class="review-card">
-      ${photoBlock(r.photos, r.category)}
+      ${photoBlock(r.photos, r.category, i)}
       <div class="review-cat">${r.category}</div>
       <div class="review-name">${r.name}</div>
       <div class="review-loc">${r.location}</div>
