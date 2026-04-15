@@ -80,19 +80,22 @@ section { padding: 72px 3rem; border-bottom: 0.5px solid var(--border); }
 /* PHOTO SLIDER */
 .review-photos {
   width: 100%; height: 200px; border-radius: var(--radius); margin-bottom: 1.25rem;
-  overflow: hidden; background: #111; position: relative;
+  overflow: hidden; background: #f2f2f2; position: relative;
 }
 .slider-track {
   display: flex; height: 100%; width: 100%;
   transition: transform 0.3s ease; will-change: transform;
 }
 .slider-slide {
-  min-width: 100%; height: 100%; flex-shrink: 0; overflow: hidden; position: relative;
+  min-width: 100%; height: 100%; flex-shrink: 0; overflow: hidden;
 }
 .slider-slide img {
   width: 100%; height: 100%;
   object-fit: cover; object-position: center;
   display: block;
+}
+.slider-single .slider-slide img {
+  object-fit: contain; background: #f2f2f2;
 }
 .slider-btn {
   position: absolute; top: 50%; transform: translateY(-50%);
@@ -331,98 +334,67 @@ footer { padding: 1.5rem 3rem; display: flex; justify-content: space-between; al
 
 const REVIEWS = [
   {
-    "name": "Aragawa Jakarta",
-    "category": "Steakhouse",
-    "location": "Menteng, Jakarta Pusat",
-    "rating": 5,
-    "snippet": "Wagyu A5 terbaik yang pernah gw makan di Jakarta. Worth every rupiah untuk special occasion.",
-    "price": "Rp 800rb – 2jt / orang",
-    "photos": [
-      "https://res.cloudinary.com/dvwpecf6w/image/upload/w_560,h_360,c_fill,g_auto/w_560,h_360,c_fill,g_auto/v1776232060/Screenshot_2026-04-13_at_14.42.16_uw9ai0.png"
-    ],
-    "badge": "must"
+    name: "Aragawa Jakarta",
+    category: "Steakhouse",
+    location: "Menteng, Jakarta Pusat",
+    rating: 5,
+    snippet: "Wagyu A5 terbaik yang pernah gw makan di Jakarta. Worth every rupiah untuk special occasion.",
+    price: "Rp 800rb – 2jt / orang",
+    photos: ["https://i.ibb.co/Y7rNpKCj/Screenshot-2026-04-13-at-14-42-16.png"]
+    // Contoh isi foto: photos: ["https://i.ibb.co/abc/foto-makanan.jpg", "https://i.ibb.co/xyz/foto-resto.jpg"]
   },
   {
-    "name": "Pochajjang PIK",
-    "category": "Korean BBQ",
-    "location": "PIK, Jakarta Utara",
-    "rating": 4,
-    "snippet": "Daging segar, banchan unlimited, dan grill sendiri yang seru. Antre panjang tapi worth it.",
-    "price": "Rp 200rb – 350rb / orang",
-    "photos": [],
-    "badge": ""
+    name: "Pochajjang PIK",
+    category: "Korean BBQ",
+    location: "PIK, Jakarta Utara",
+    rating: 4,
+    snippet: "Daging segar, banchan unlimited, dan grill sendiri yang seru. Antre panjang tapi worth it.",
+    price: "Rp 200rb – 350rb / orang",
+    photos: []
   },
   {
-    "name": "Enoshima",
-    "category": "Izakaya",
-    "location": "Kemang, Jakarta Selatan",
-    "rating": 5,
-    "snippet": "Sake terbaik di Jakarta versi gw. Skewer udang krispi + suasana yang bikin betah sampai tutup.",
-    "price": "Rp 300rb – 500rb / orang",
-    "photos": [],
-    "badge": ""
+    name: "Enoshima",
+    category: "Izakaya",
+    location: "Kemang, Jakarta Selatan",
+    rating: 5,
+    snippet: "Sake terbaik di Jakarta versi gw. Skewer udang krispi + suasana yang bikin betah sampai tutup.",
+    price: "Rp 300rb – 500rb / orang",
+    photos: []
   },
   {
-    "name": "Warung Bu Mi",
-    "category": "Street Food",
-    "location": "Ubud, Bali",
-    "rating": 4,
-    "snippet": "Nasi campur Bali yang autentik. Babi guling-nya crispy sempurna, sambal matah segar banget.",
-    "price": "Rp 35rb – 60rb / orang",
-    "photos": [],
-    "badge": ""
+    name: "Warung Bu Mi",
+    category: "Street Food",
+    location: "Ubud, Bali",
+    rating: 4,
+    snippet: "Nasi campur Bali yang autentik. Babi guling-nya crispy sempurna, sambal matah segar banget.",
+    price: "Rp 35rb – 60rb / orang",
+    photos: []
   },
   {
-    "name": "El Asador",
-    "category": "Steakhouse",
-    "location": "Seminyak, Bali",
-    "rating": 4,
-    "snippet": "Argentine-style open fire grill. Ribeye juicy, chimichurri homemade, view garden yang enak.",
-    "price": "Rp 400rb – 700rb / orang",
-    "photos": [],
-    "badge": ""
+    name: "El Asador",
+    category: "Steakhouse",
+    location: "Seminyak, Bali",
+    rating: 4,
+    snippet: "Argentine-style open fire grill. Ribeye juicy, chimichurri homemade, view garden yang enak.",
+    price: "Rp 400rb – 700rb / orang",
+    photos: []
   },
   {
-    "name": "Hoshigaoka",
-    "category": "Izakaya",
-    "location": "Sudirman, Jakarta Selatan",
-    "rating": 5,
-    "snippet": "Hidden gem izakaya di basement. Sashimi segar, highball balanced, harga masuk akal.",
-    "price": "Rp 250rb – 450rb / orang",
-    "photos": [],
-    "badge": ""
+    name: "Hoshigaoka",
+    category: "Izakaya",
+    location: "Sudirman, Jakarta Selatan",
+    rating: 5,
+    snippet: "Hidden gem izakaya di basement. Sashimi segar, highball balanced, harga masuk akal.",
+    price: "Rp 250rb – 450rb / orang",
+    photos: []
   }
 ];
 
 const UPCOMING = [
-  {
-    "day": "14",
-    "month": "Apr",
-    "name": "Burnt Ends SCBD",
-    "address": "Jl. Sudirman, Jakarta Selatan",
-    "status": "confirmed"
-  },
-  {
-    "day": "15",
-    "month": "Apr",
-    "name": "Gyu-Kaku Senayan",
-    "address": "Plaza Senayan, Jakarta Pusat",
-    "status": "confirmed"
-  },
-  {
-    "day": "17",
-    "month": "Apr",
-    "name": "Merah Putih Bali",
-    "address": "Jl. Petitenget, Seminyak",
-    "status": "tentative"
-  },
-  {
-    "day": "18",
-    "month": "Apr",
-    "name": "Warung Mak Beng",
-    "address": "Jl. Hang Tuah, Sanur",
-    "status": "tentative"
-  }
+  { day: "14", month: "Apr", name: "Burnt Ends SCBD", address: "Jl. Sudirman, Jakarta Selatan", status: "confirmed" },
+  { day: "15", month: "Apr", name: "Gyu-Kaku Senayan", address: "Plaza Senayan, Jakarta Pusat", status: "confirmed" },
+  { day: "17", month: "Apr", name: "Merah Putih Bali", address: "Jl. Petitenget, Seminyak", status: "tentative" },
+  { day: "18", month: "Apr", name: "Warung Mak Beng", address: "Jl. Hang Tuah, Sanur", status: "tentative" }
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -471,6 +443,7 @@ function photoBlock(photos, cat, cardIdx) {
     </div>`;
   }
   const capped = photos.slice(0, 4);
+  const isSingle = capped.length === 1;
   const slides = capped.map(p =>
     `<div class="slider-slide"><img src="${p}" alt="" loading="lazy"></div>`
   ).join('');
@@ -483,7 +456,7 @@ function photoBlock(photos, cat, cardIdx) {
     ? `<button class="slider-btn prev" onclick="slideMove(${cardIdx},-1,event)">&#8592;</button>
        <button class="slider-btn next" onclick="slideMove(${cardIdx},1,event)">&#8594;</button>`
     : '';
-  return `<div class="review-photos" id="slider-${cardIdx}">
+  return `<div class="review-photos${isSingle?' slider-single':''}" id="slider-${cardIdx}">
     <div class="slider-track" id="track-${cardIdx}" data-idx="0" data-len="${capped.length}"
          onclick="openLb(${JSON.stringify(capped).replace(/"/g,"'")},+document.getElementById('track-${cardIdx}').dataset.idx)">
       ${slides}
