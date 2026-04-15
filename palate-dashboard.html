@@ -126,6 +126,23 @@ nav {
 .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.625rem; }
 .photos-hint { font-size: 11px; color: var(--ink4); margin-top: 5px; line-height: 1.6; }
 
+/* BADGE */
+.badge-options { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.badge-opt {
+  font-family: inherit; font-size: 11px; padding: 5px 12px;
+  border-radius: 20px; border: 0.5px solid var(--border-strong);
+  background: #fff; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.badge-opt:hover { border-color: var(--ink); }
+.badge-opt.sel { border-color: transparent; }
+.badge-opt[data-val="must"]     { }
+.badge-opt[data-val="must"].sel     { background: #fff3e0; border-color: #e67e00; color: #a05000; }
+.badge-opt[data-val="recommended"].sel { background: #e8f5e9; border-color: #388e3c; color: #1b5e20; }
+.badge-opt[data-val="worth"].sel    { background: #e3f2fd; border-color: #1976d2; color: #0d47a1; }
+.badge-opt[data-val="situational"].sel { background: #fff8e1; border-color: #f9a825; color: #7c5800; }
+.badge-opt[data-val="skip"].sel     { background: #fce4ec; border-color: #c62828; color: #7f0000; }
+.card-badge { font-size: 11px; margin-left: 6px; }
+
 /* STARS */
 .stars-wrap { display: flex; gap: 5px; margin-top: 4px; }
 .star-btn {
@@ -369,6 +386,7 @@ function readRevForm(i) {
   REVIEWS[i].price    = document.getElementById('rp-' + i).value;
   const ph = document.getElementById('rph-' + i).value.trim();
   REVIEWS[i].photos = ph ? ph.split('\n').map(s => s.trim()).filter(Boolean) : [];
+  REVIEWS[i].badge = REVIEWS[i].badge || '';
 }
 function readUpForm(i) {
   UPCOMING[i].day     = document.getElementById('ud-' + i).value;
@@ -381,6 +399,22 @@ function readUpForm(i) {
 /* ─── CATEGORIES ──────────────────────────────────────────────────────────── */
 const CATS = ['Steakhouse','Korean BBQ','Izakaya','Street Food','Japanese','Italian','Western','Asian Fusion','Cafe','Lainnya'];
 
+const BADGES = [
+  { val: 'must',        label: '🔥 Must Visit' },
+  { val: 'recommended', label: '✅ Recommended' },
+  { val: 'worth',       label: '👍 Worth a Try' },
+  { val: 'situational', label: '⚠️ Situational' },
+  { val: 'skip',        label: '❌ Skip' },
+];
+
+function setBadge(idx, val) {
+  REVIEWS[idx].badge = val;
+  document.querySelectorAll('#badge-' + idx + ' .badge-opt').forEach(b => {
+    b.classList.toggle('sel', b.dataset.val === val);
+  });
+  renderReviews();
+}
+
 /* ─── ESCAPE HTML ─────────────────────────────────────────────────────────── */
 function esc(s) {
   return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -389,11 +423,16 @@ function esc(s) {
 /* ─── RENDER REVIEWS ──────────────────────────────────────────────────────── */
 function renderReviews() {
   document.getElementById('rev-count').textContent = REVIEWS.length + ' reviews';
-  document.getElementById('rev-list').innerHTML = REVIEWS.map((r, i) => `
+  document.getElementById('rev-list').innerHTML = REVIEWS.map((r, i) => {
+    const badgeObj = BADGES.find(b => b.val === r.badge);
+    return `
     <div class="card">
       <div class="card-head" onclick="toggleCard('r${i}')">
         <div>
-          <div class="card-name">${esc(r.name) || '<span style="color:var(--ink4)">(belum ada nama)</span>'}</div>
+          <div class="card-name">
+            ${esc(r.name) || '<span style="color:var(--ink4)">(belum ada nama)</span>'}
+            ${badgeObj ? `<span class="card-badge">${badgeObj.label}</span>` : ''}
+          </div>
           <div class="card-meta">${esc(r.category)} &middot; ${'★'.repeat(r.rating || 0)}${'☆'.repeat(5-(r.rating||0))}</div>
         </div>
         <span class="chevron" id="chev-r${i}">▼</span>
@@ -424,6 +463,14 @@ function renderReviews() {
           </div>
         </div>
         <div class="field">
+          <label>Rekomendasi</label>
+          <div class="badge-options" id="badge-${i}">
+            ${BADGES.map(b =>
+              `<button class="badge-opt${r.badge === b.val ? ' sel' : ''}" data-val="${b.val}" onclick="setBadge(${i},'${b.val}')">${b.label}</button>`
+            ).join('')}
+          </div>
+        </div>
+        <div class="field">
           <label>Review snippet</label>
           <textarea id="rs-${i}" placeholder="Cerita singkat pengalaman makan di sini...">${esc(r.snippet)}</textarea>
         </div>
@@ -446,7 +493,7 @@ function renderReviews() {
         </div>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 /* ─── RENDER UPCOMING ─────────────────────────────────────────────────────── */
@@ -499,7 +546,7 @@ function renderUpcoming() {
 
 /* ─── ADD / DELETE ────────────────────────────────────────────────────────── */
 function addReview() {
-  REVIEWS.push({ name: '', category: 'Steakhouse', location: '', rating: 4, snippet: '', price: '', photos: [] });
+  REVIEWS.push({ name: '', category: 'Steakhouse', location: '', rating: 4, badge: '', snippet: '', price: '', photos: [] });
   renderReviews();
   const i = REVIEWS.length - 1;
   toggleCard('r' + i);
