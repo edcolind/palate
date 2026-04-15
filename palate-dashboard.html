@@ -377,6 +377,15 @@ function setStars(idx, n) {
   });
 }
 
+/* ─── CLOUDINARY AUTO-TRANSFORM ───────────────────────────────────────────── */
+function transformPhotoUrl(url) {
+  url = url.trim();
+  if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+    return url.replace('/upload/', '/upload/w_560,h_360,c_fill,g_auto/');
+  }
+  return url;
+}
+
 /* ─── READ FORM VALUES ────────────────────────────────────────────────────── */
 function readRevForm(i) {
   REVIEWS[i].name     = document.getElementById('rn-' + i).value;
@@ -385,7 +394,7 @@ function readRevForm(i) {
   REVIEWS[i].snippet  = document.getElementById('rs-' + i).value;
   REVIEWS[i].price    = document.getElementById('rp-' + i).value;
   const ph = document.getElementById('rph-' + i).value.trim();
-  REVIEWS[i].photos = ph ? ph.split('\n').map(s => s.trim()).filter(Boolean) : [];
+  REVIEWS[i].photos = ph ? ph.split('\n').map(s => transformPhotoUrl(s)).filter(Boolean) : [];
   REVIEWS[i].badge = REVIEWS[i].badge || '';
 }
 function readUpForm(i) {
@@ -482,8 +491,8 @@ function renderReviews() {
           <label>Link foto (satu per baris)</label>
           <textarea id="rph-${i}" placeholder="https://i.ibb.co/...">${(r.photos || []).join('\n')}</textarea>
           <div class="photos-hint">
-            Upload foto ke <strong>imgbb.com</strong> (gratis) → klik "Direct link" → paste di sini.<br>
-            Bisa beberapa foto sekaligus, satu link per baris.
+            Upload foto ke <strong>Cloudinary</strong> → copy URL → paste di sini.<br>
+            URL otomatis di-adjust ukurannya. Bisa beberapa foto, satu link per baris.
           </div>
         </div>
         <div class="divider"></div>
