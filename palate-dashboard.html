@@ -633,9 +633,19 @@ async function publish() {
     const revJson = JSON.stringify(REVIEWS, null, 2);
     const upJson  = JSON.stringify(UPCOMING, null, 2);
 
-    let updated = original
-      .replace(/const REVIEWS = \[[\s\S]*?\];/, 'const REVIEWS = ' + revJson + ';')
-      .replace(/const UPCOMING = \[[\s\S]*?\];/, 'const UPCOMING = ' + upJson + ';');
+    function replaceArray(src, varName, newJson) {
+      const start = src.indexOf('const ' + varName + ' = [');
+      if (start === -1) return src;
+      let depth = 0, i = src.indexOf('[', start);
+      for (; i < src.length; i++) {
+        if (src[i] === '[') depth++;
+        else if (src[i] === ']') { depth--; if (depth === 0) break; }
+      }
+      return src.slice(0, start) + 'const ' + varName + ' = ' + newJson + ';' + src.slice(i + 2);
+    }
+
+    let updated = replaceArray(original, 'REVIEWS', revJson);
+    updated = replaceArray(updated, 'UPCOMING', upJson);
 
     if (updated === original) {
       throw new Error('Pola REVIEWS/UPCOMING tidak ditemukan. Pastikan struktur index.html tidak berubah.');
