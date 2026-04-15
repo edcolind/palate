@@ -331,67 +331,98 @@ footer { padding: 1.5rem 3rem; display: flex; justify-content: space-between; al
 
 const REVIEWS = [
   {
-    name: "Aragawa Jakarta",
-    category: "Steakhouse",
-    location: "Menteng, Jakarta Pusat",
-    rating: 5,
-    snippet: "Wagyu A5 terbaik yang pernah gw makan di Jakarta. Worth every rupiah untuk special occasion.",
-    price: "Rp 800rb – 2jt / orang",
-    photos: ["https://i.ibb.co/Y7rNpKCj/Screenshot-2026-04-13-at-14-42-16.png"]
-    // Contoh isi foto: photos: ["https://i.ibb.co/abc/foto-makanan.jpg", "https://i.ibb.co/xyz/foto-resto.jpg"]
+    "name": "Aragawa Jakarta",
+    "category": "Steakhouse",
+    "location": "Menteng, Jakarta Pusat",
+    "rating": 5,
+    "snippet": "Wagyu A5 terbaik yang pernah gw makan di Jakarta. Worth every rupiah untuk special occasion.",
+    "price": "Rp 800rb – 2jt / orang",
+    "photos": [
+      "https://res.cloudinary.com/dvwpecf6w/image/upload/w_560,h_360,c_fill,g_auto/v1776232060/Screenshot_2026-04-13_at_14.42.16_uw9ai0.png"
+    ],
+    "badge": ""
   },
   {
-    name: "Pochajjang PIK",
-    category: "Korean BBQ",
-    location: "PIK, Jakarta Utara",
-    rating: 4,
-    snippet: "Daging segar, banchan unlimited, dan grill sendiri yang seru. Antre panjang tapi worth it.",
-    price: "Rp 200rb – 350rb / orang",
-    photos: []
+    "name": "Pochajjang PIK",
+    "category": "Korean BBQ",
+    "location": "PIK, Jakarta Utara",
+    "rating": 4,
+    "snippet": "Daging segar, banchan unlimited, dan grill sendiri yang seru. Antre panjang tapi worth it.",
+    "price": "Rp 200rb – 350rb / orang",
+    "photos": [],
+    "badge": ""
   },
   {
-    name: "Enoshima",
-    category: "Izakaya",
-    location: "Kemang, Jakarta Selatan",
-    rating: 5,
-    snippet: "Sake terbaik di Jakarta versi gw. Skewer udang krispi + suasana yang bikin betah sampai tutup.",
-    price: "Rp 300rb – 500rb / orang",
-    photos: []
+    "name": "Enoshima",
+    "category": "Izakaya",
+    "location": "Kemang, Jakarta Selatan",
+    "rating": 5,
+    "snippet": "Sake terbaik di Jakarta versi gw. Skewer udang krispi + suasana yang bikin betah sampai tutup.",
+    "price": "Rp 300rb – 500rb / orang",
+    "photos": [],
+    "badge": ""
   },
   {
-    name: "Warung Bu Mi",
-    category: "Street Food",
-    location: "Ubud, Bali",
-    rating: 4,
-    snippet: "Nasi campur Bali yang autentik. Babi guling-nya crispy sempurna, sambal matah segar banget.",
-    price: "Rp 35rb – 60rb / orang",
-    photos: []
+    "name": "Warung Bu Mi",
+    "category": "Street Food",
+    "location": "Ubud, Bali",
+    "rating": 4,
+    "snippet": "Nasi campur Bali yang autentik. Babi guling-nya crispy sempurna, sambal matah segar banget.",
+    "price": "Rp 35rb – 60rb / orang",
+    "photos": [],
+    "badge": ""
   },
   {
-    name: "El Asador",
-    category: "Steakhouse",
-    location: "Seminyak, Bali",
-    rating: 4,
-    snippet: "Argentine-style open fire grill. Ribeye juicy, chimichurri homemade, view garden yang enak.",
-    price: "Rp 400rb – 700rb / orang",
-    photos: []
+    "name": "El Asador",
+    "category": "Steakhouse",
+    "location": "Seminyak, Bali",
+    "rating": 4,
+    "snippet": "Argentine-style open fire grill. Ribeye juicy, chimichurri homemade, view garden yang enak.",
+    "price": "Rp 400rb – 700rb / orang",
+    "photos": [],
+    "badge": ""
   },
   {
-    name: "Hoshigaoka",
-    category: "Izakaya",
-    location: "Sudirman, Jakarta Selatan",
-    rating: 5,
-    snippet: "Hidden gem izakaya di basement. Sashimi segar, highball balanced, harga masuk akal.",
-    price: "Rp 250rb – 450rb / orang",
-    photos: []
+    "name": "Hoshigaoka",
+    "category": "Izakaya",
+    "location": "Sudirman, Jakarta Selatan",
+    "rating": 5,
+    "snippet": "Hidden gem izakaya di basement. Sashimi segar, highball balanced, harga masuk akal.",
+    "price": "Rp 250rb – 450rb / orang",
+    "photos": [],
+    "badge": ""
   }
 ];
 
 const UPCOMING = [
-  { day: "14", month: "Apr", name: "Burnt Ends SCBD", address: "Jl. Sudirman, Jakarta Selatan", status: "confirmed" },
-  { day: "15", month: "Apr", name: "Gyu-Kaku Senayan", address: "Plaza Senayan, Jakarta Pusat", status: "confirmed" },
-  { day: "17", month: "Apr", name: "Merah Putih Bali", address: "Jl. Petitenget, Seminyak", status: "tentative" },
-  { day: "18", month: "Apr", name: "Warung Mak Beng", address: "Jl. Hang Tuah, Sanur", status: "tentative" }
+  {
+    "day": "14",
+    "month": "Apr",
+    "name": "Burnt Ends SCBD",
+    "address": "Jl. Sudirman, Jakarta Selatan",
+    "status": "confirmed"
+  },
+  {
+    "day": "15",
+    "month": "Apr",
+    "name": "Gyu-Kaku Senayan",
+    "address": "Plaza Senayan, Jakarta Pusat",
+    "status": "confirmed"
+  },
+  {
+    "day": "17",
+    "month": "Apr",
+    "name": "Merah Putih Bali",
+    "address": "Jl. Petitenget, Seminyak",
+    "status": "tentative"
+  },
+  {
+    "day": "18",
+    "month": "Apr",
+    "name": "Warung Mak Beng",
+    "address": "Jl. Hang Tuah, Sanur",
+    "status": "tentative"
+  }
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
