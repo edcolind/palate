@@ -243,7 +243,8 @@ nav {
   <!-- TABS -->
   <div class="tabs">
     <button class="tab on" onclick="switchTab('reviews', this)">Reviews</button>
-    <button class="tab" onclick="switchTab('upcoming', this)">Upcoming</button>
+    <button class="tab" onclick="switchTab('upcoming', this)">On the Radar</button>
+    <button class="tab" onclick="switchTab('invest', this)">F&amp;B Investment</button>
   </div>
 
   <!-- REVIEWS PANEL -->
@@ -258,6 +259,80 @@ nav {
     <div class="section-label" id="up-count"></div>
     <div id="up-list"></div>
     <button class="add-btn" onclick="addUpcoming()">+ Tambah jadwal baru</button>
+  </div>
+
+  <!-- INVEST PANEL -->
+  <div class="panel" id="panel-invest">
+    <div class="section-label">Konten F&amp;B Investment</div>
+
+    <div class="card" style="margin-bottom:0.625rem">
+      <div class="card-head" onclick="toggleCard('invest-copy')">
+        <div>
+          <div class="card-name">Teks &amp; Kriteria</div>
+          <div class="card-meta">Headline, deskripsi, ticket size, model, fokus, area</div>
+        </div>
+        <span class="chevron" id="chev-invest-copy">▼</span>
+      </div>
+      <div class="card-body" id="body-invest-copy">
+        <div class="field">
+          <label>Headline (angka besar)</label>
+          <input id="inv-headline" value="Up to Rp 50 juta." placeholder="Up to Rp 50 juta.">
+        </div>
+        <div class="field">
+          <label>Deskripsi</label>
+          <textarea id="inv-desc" style="min-height:80px">Gw bukan VC. Gw partner — ikut taste test, ikut bantu positioning, ikut seneng waktu tempat lo rame. Investment berbasis kemitraan nyata, bukan sekadar modal.</textarea>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Ticket size</label>
+            <input id="inv-ticket" value="Rp 10 — 50 juta" placeholder="Rp 10 — 50 juta">
+          </div>
+          <div class="field">
+            <label>Model</label>
+            <input id="inv-model" value="Equity partnership" placeholder="Equity partnership">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Fokus</label>
+            <input id="inv-fokus" value="F&amp;B concept only" placeholder="F&amp;B concept only">
+          </div>
+          <div class="field">
+            <label>Area</label>
+            <input id="inv-area" value="Jakarta &amp; Bali" placeholder="Jakarta &amp; Bali">
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="card-actions">
+          <span class="hint">perubahan tersimpan saat Publish</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('invest-form')">
+        <div>
+          <div class="card-name">Form Proposal</div>
+          <div class="card-meta">Pesan sukses &amp; Formspree ID</div>
+        </div>
+        <span class="chevron" id="chev-invest-form">▼</span>
+      </div>
+      <div class="card-body" id="body-invest-form">
+        <div class="field">
+          <label>Pesan sukses setelah submit</label>
+          <input id="inv-success" value="Proposal lo sudah masuk! Gw akan reach out dalam 3–5 hari kerja." placeholder="Pesan sukses...">
+        </div>
+        <div class="field">
+          <label>Formspree ID</label>
+          <input id="inv-formspree" value="xrerzngo" placeholder="xrerzngo">
+          <div class="photos-hint">Cek di <strong>formspree.io</strong> → form lo → Settings → Form endpoint untuk ID-nya.</div>
+        </div>
+        <div class="divider"></div>
+        <div class="card-actions">
+          <span class="hint">perubahan tersimpan saat Publish</span>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -611,6 +686,41 @@ function collectAll() {
   UPCOMING.forEach((_, i) => readUpForm(i));
 }
 
+/* ─── READ INVEST FIELDS ──────────────────────────────────────────────────── */
+function readInvestFields() {
+  return {
+    headline: document.getElementById('inv-headline').value,
+    desc:     document.getElementById('inv-desc').value,
+    ticket:   document.getElementById('inv-ticket').value,
+    model:    document.getElementById('inv-model').value,
+    fokus:    document.getElementById('inv-fokus').value,
+    area:     document.getElementById('inv-area').value,
+    success:  document.getElementById('inv-success').value,
+    formspree: document.getElementById('inv-formspree').value,
+  };
+}
+
+function replaceInvest(src, inv) {
+  // Replace headline
+  src = src.replace(/<div class="invest-number">.*?<\/div>/s,
+    `<div class="invest-number">${inv.headline.replace(/\n/g,'<br>')}</div>`);
+  // Replace desc
+  src = src.replace(/<p class="invest-desc">.*?<\/p>/s,
+    `<p class="invest-desc">${inv.desc}</p>`);
+  // Replace crit values — in order: ticket, model, fokus, area
+  const vals = [inv.ticket, inv.model, inv.fokus, inv.area];
+  let count = 0;
+  src = src.replace(/<div class="crit-val">.*?<\/div>/g, (match) => {
+    return count < vals.length ? `<div class="crit-val">${vals[count++]}</div>` : match;
+  });
+  // Replace formspree ID in fetch URL
+  src = src.replace(/formspree\.io\/f\/[a-z0-9]+/, `formspree.io/f/${inv.formspree}`);
+  src = src.replace(/_subject.*?\[PALATE\].*?'/, match => match); // keep subject
+  // Replace success message
+  src = src.replace(/(<div class="form-success"[^>]*>).*?(<\/div>)/, `$1${inv.success}$2`);
+  return src;
+}
+
 /* ─── TOAST ───────────────────────────────────────────────────────────────── */
 let toastTimer;
 function toast(msg, type) {
@@ -672,6 +782,8 @@ async function publish() {
 
     let updated = replaceArray(original, 'REVIEWS', revJson);
     updated = replaceArray(updated, 'UPCOMING', upJson);
+    const inv = readInvestFields();
+    updated = replaceInvest(updated, inv);
 
     if (updated === original) {
       throw new Error('Pola REVIEWS/UPCOMING tidak ditemukan. Pastikan struktur index.html tidak berubah.');
