@@ -641,7 +641,7 @@ async function publish() {
         if (src[i] === '[') depth++;
         else if (src[i] === ']') { depth--; if (depth === 0) break; }
       }
-      return src.slice(0, start) + 'const ' + varName + ' = ' + newJson + ';' + src.slice(i + 2);
+      return src.slice(0, start) + 'const ' + varName + ' = ' + newJson + ';' + src.slice(i + 1);
     }
 
     let updated = replaceArray(original, 'REVIEWS', revJson);
