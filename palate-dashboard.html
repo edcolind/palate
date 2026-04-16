@@ -172,6 +172,30 @@ nav {
 }
 .add-btn:hover { border-color: var(--ink); color: var(--ink); }
 
+/* VISIBILITY TOGGLE */
+.vis-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1.25rem; background: var(--hover);
+  border: 0.5px solid var(--border-strong); border-radius: var(--r-lg);
+  margin-bottom: 1.25rem;
+}
+.vis-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); }
+.vis-switches { display: flex; gap: 0.75rem; }
+.vis-switch { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.vis-switch input[type=checkbox] { display: none; }
+.vis-pill {
+  width: 36px; height: 20px; border-radius: 10px; background: #ddd;
+  position: relative; transition: background 0.2s; flex-shrink: 0;
+}
+.vis-pill::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 14px; height: 14px; border-radius: 50%; background: #fff;
+  transition: transform 0.2s;
+}
+.vis-switch input:checked + .vis-pill { background: var(--ink); }
+.vis-switch input:checked + .vis-pill::after { transform: translateX(16px); }
+.vis-name { font-size: 11px; color: var(--ink3); }
+
 /* TOAST */
 .toast {
   position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
@@ -237,6 +261,28 @@ nav {
         Buat token di: <a href="https://github.com/settings/tokens?type=beta" target="_blank">github.com → Settings → Developer settings → Personal access tokens → Fine-grained</a><br>
         Pilih repo <code>palate</code> → permission <code>Contents: Read &amp; Write</code>
       </div>
+    </div>
+  </div>
+
+  <!-- VISIBILITY TOGGLES -->
+  <div class="vis-row">
+    <span class="vis-label">Tampilkan di site</span>
+    <div class="vis-switches">
+      <label class="vis-switch">
+        <input type="checkbox" id="vis-reviews" checked onchange="saveVisibility()">
+        <div class="vis-pill"></div>
+        <span class="vis-name">Reviews</span>
+      </label>
+      <label class="vis-switch">
+        <input type="checkbox" id="vis-upcoming" checked onchange="saveVisibility()">
+        <div class="vis-pill"></div>
+        <span class="vis-name">On the Radar</span>
+      </label>
+      <label class="vis-switch">
+        <input type="checkbox" id="vis-invest" checked onchange="saveVisibility()">
+        <div class="vis-pill"></div>
+        <span class="vis-name">F&amp;B Investment</span>
+      </label>
     </div>
   </div>
 
@@ -784,6 +830,12 @@ async function publish() {
     updated = replaceArray(updated, 'UPCOMING', upJson);
     const inv = readInvestFields();
     updated = replaceInvest(updated, inv);
+    const vis = {
+      reviews:  document.getElementById('vis-reviews').checked,
+      upcoming: document.getElementById('vis-upcoming').checked,
+      invest:   document.getElementById('vis-invest').checked,
+    };
+    updated = applyVisibility(updated, vis);
 
     if (updated === original) {
       throw new Error('Pola REVIEWS/UPCOMING tidak ditemukan. Pastikan struktur index.html tidak berubah.');
@@ -825,8 +877,51 @@ async function publish() {
   }
 }
 
+/* ─── VISIBILITY ──────────────────────────────────────────────────────────── */
+function saveVisibility() {
+  const v = {
+    reviews:  document.getElementById('vis-reviews').checked,
+    upcoming: document.getElementById('vis-upcoming').checked,
+    invest:   document.getElementById('vis-invest').checked,
+  };
+  localStorage.setItem('palate_visibility', JSON.stringify(v));
+}
+function loadVisibility() {
+  try {
+    const v = JSON.parse(localStorage.getItem('palate_visibility'));
+    if (!v) return;
+    if (v.reviews  !== undefined) document.getElementById('vis-reviews').checked  = v.reviews;
+    if (v.upcoming !== undefined) document.getElementById('vis-upcoming').checked = v.upcoming;
+    if (v.invest   !== undefined) document.getElementById('vis-invest').checked   = v.invest;
+  } catch(e) {}
+}
+function applyVisibility(src, vis) {
+  // Show/hide sections by toggling display:none on the <section> tags
+  function setSection(html, sectionId, show) {
+    if (show) {
+      // remove any display:none we previously added
+      html = html.replace(
+        new RegExp('(<section[^>]*id="' + sectionId + '"[^>]*) style="display:none"', 'g'),
+        '$1'
+      );
+    } else {
+      // add display:none if not already there
+      html = html.replace(
+        new RegExp('(<section[^>]*id="' + sectionId + '")(?! style="display:none")', 'g'),
+        '$1 style="display:none"'
+      );
+    }
+    return html;
+  }
+  src = setSection(src, 'reviews',  vis.reviews);
+  src = setSection(src, 'upcoming', vis.upcoming);
+  src = setSection(src, 'invest',   vis.invest);
+  return src;
+}
+
 /* ─── INIT ────────────────────────────────────────────────────────────────── */
 loadToken();
+loadVisibility();
 renderReviews();
 renderUpcoming();
 </script>
