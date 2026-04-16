@@ -568,7 +568,6 @@ function setBadge(idx, val) {
   document.querySelectorAll('#badge-' + idx + ' .badge-opt').forEach(b => {
     b.classList.toggle('sel', b.dataset.val === val);
   });
-  renderReviews();
 }
 
 /* ─── ESCAPE HTML ─────────────────────────────────────────────────────────── */
